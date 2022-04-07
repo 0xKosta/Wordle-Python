@@ -11,12 +11,19 @@
 
 import random
 import platform
+import os
 
 file = open('words.txt')
 content = file.readlines()
+content_check = file.read()
 word = content[random.randint(0, 5756)]
 word = word[0:5]
-word = word.upper()
+
+def clear():
+  if platform.system() == "Linux" or platform.system() == "Darwin":
+      os.system("clear")
+  elif platform.system() == "Windows":
+      os.system("cls")
 
 def show(guess):
     print("---------------------")
@@ -67,23 +74,24 @@ guessword = ""
 guesses = 0
 show(guess)
 print("What is your guess?")
-guessword = input().upper()
-while len(guessword) != 5:
+guessword = input()
+while len(guessword) != 5 or (guessword + "\n") not in content:
     print("Invalid entry, please retry.")
-    guessword = input().upper()
+    guessword = input()
 guess_deconstruct = []
 for i in range(len(word)):
     guess_deconstruct.append(guessword[i])
 color(guess_deconstruct)
 guess[guesses] = guess_deconstruct
 while word != guessword and guesses < 5:
+    clear()
     guesses += 1
     show(guess)
     print("What is your guess?")
-    guessword = input().upper()
-    while len(guessword) != 5:
+    guessword = input()
+    while len(guessword) != 5 or (guessword + "\n") not in content:
         print("Invalid entry, please retry.")
-        guessword = input().upper()
+        guessword = input()
     guess_deconstruct = []
     for i in range(len(word)):
         guess_deconstruct.append(guessword[i])
@@ -91,6 +99,7 @@ while word != guessword and guesses < 5:
     guess[guesses] = guess_deconstruct
     if word == guessword:
         break
+clear()
 show(guess)
 if word == guessword:
     if guesses + 1 == 1:
